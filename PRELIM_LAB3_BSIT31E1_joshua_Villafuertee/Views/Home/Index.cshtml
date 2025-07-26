@@ -1,18 +1,39 @@
 ﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
     var CustomerList = ViewBag.CustomerList as List<PRELIM_LAB3_BSIT31E1_joshua_Villafuerte.Models.Customer>;
 }
 
-<h2>Customer List</h2>
-<ul>
-    @foreach (var customer in CustomerList)
-    {
-        if (customer is PRELIM_LAB3_BSIT31E1_joshua_Villafuerte.Models.VipCustomer vip)
+<div class="container py-5">
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold">Hall of Customers</h1>
+        <p class="text-muted">Showing VIP and Regular Customers</p>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        @foreach (var customer in CustomerList)
         {
-            <li>@vip.GetDescription()</li>
+            bool isVip = customer is PRELIM_LAB3_BSIT31E1_joshua_Villafuerte.Models.VipCustomer;
+            string borderColor = isVip ? "border-warning" : "border-secondary";
+            string titleColor = isVip ? "text-warning" : "text-secondary";
+            string footerBg = isVip ? "bg-warning text-dark" : "bg-secondary text-white";
+            string typeLabel = isVip ? "VIP Customer" : "Regular Customer";
+
+            <div class="col">
+                <div class="card @borderColor shadow h-100">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold @titleColor">@typeLabel</h5>
+                        <hr />
+                        <p><strong>Name:</strong> @customer.GetFullName()</p>
+                        <p><strong>Email:</strong> @customer.Email</p>
+                        <p><strong>Birthday:</strong> @customer.BirthDay.ToShortDateString()</p>
+                        <p><strong>Age:</strong> @customer.GetAge()</p>
+                        <p><strong>Address:</strong> @customer.Address</p>
+                    </div>
+                    <div class="card-footer @footerBg text-end">
+                        <small><strong>Customer ID:</strong> @customer.CustomerId</small>
+                    </div>
+                </div>
+            </div>
         }
-        else
-        {
-            <li>@customer.GetDescription()</li>
-        }
-    }
-</ul>
+    </div>
+</div>
